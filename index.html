@@ -3,15 +3,45 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Dashboard | बाबा त्रिवटीनाथ मन्दिर</title>
+  <title>भक्त पंजीकरण सूची | बाबा त्रिवटीनाथ मन्दिर</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-  <link href="style.css" rel="stylesheet"/>
-  <style>
-    /* ── Admin Page Styles ── */
-    body { background: #f0e8d8; }
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
 
-    /* ── Top Bar ── */
+  <style>
+    /* ── CSS Variables (matching project style.css) ── */
+    :root {
+      --saffron:        #d4600a;
+      --saffron-light:  #f4a23a;
+      --gold:           #c8923a;
+      --gold-bright:    #f0c060;
+      --maroon:         #7a1c1c;
+      --maroon-deep:    #5c1212;
+      --cream:          #fdf6ec;
+      --cream-dark:     #f3e8d0;
+      --brown-dark:     #3b1f0d;
+      --text-dark:      #2c1a0e;
+      --text-mid:       #5a3a1a;
+      --text-light:     #8a6a3a;
+      --border-gold:    rgba(200,146,58,.35);
+      --shadow-sm:      0 2px 12px rgba(0,0,0,.07);
+      --shadow-md:      0 6px 25px rgba(0,0,0,.12);
+      --shadow-lg:      0 12px 40px rgba(0,0,0,.18);
+      --radius:         6px;
+      --transition:     .25s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Tiro Devanagari Hindi', serif;
+      background: #f0e8d8;
+      color: var(--text-dark);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── Top Bar (identical to admin.html) ── */
     .admin-topbar {
       background: linear-gradient(135deg, var(--maroon-deep), var(--maroon), var(--brown-dark));
       border-bottom: 3px solid var(--gold);
@@ -24,9 +54,7 @@
       z-index: 100;
       box-shadow: 0 4px 24px rgba(0,0,0,.4);
     }
-    .admin-topbar .brand {
-      display: flex; align-items: center; gap: .8rem;
-    }
+    .admin-topbar .brand { display: flex; align-items: center; gap: .8rem; }
     .admin-topbar .brand .om {
       width: 44px; height: 44px;
       background: linear-gradient(135deg, var(--saffron), var(--gold));
@@ -40,28 +68,42 @@
     .admin-topbar .brand-text .title {
       font-family: 'Cinzel', serif;
       color: var(--gold-bright);
-      font-size: 1rem;
-      font-weight: 700;
+      font-size: 1rem; font-weight: 700;
     }
-    .admin-topbar .brand-text .sub {
-      font-size: .75rem;
-      color: #c8a060;
-      opacity: .85;
-    }
+    .admin-topbar .brand-text .sub { font-size: .75rem; color: #c8a060; opacity: .85; }
     .admin-badge {
       background: var(--gold);
       color: var(--maroon-deep);
       font-family: 'Cinzel', serif;
-      font-size: .7rem;
-      font-weight: 700;
+      font-size: .7rem; font-weight: 700;
       padding: .3rem .9rem;
       border-radius: 50px;
       letter-spacing: .1em;
       text-transform: uppercase;
     }
+    .topbar-right { display: flex; align-items: center; gap: .8rem; }
+    .btn-topbar-back {
+      display: flex; align-items: center; gap: .4rem;
+      padding: .3rem .85rem;
+      border: 1.5px solid rgba(240,192,96,.4);
+      border-radius: 50px;
+      color: var(--gold-bright);
+      font-family: 'Cinzel', serif;
+      font-size: .7rem; font-weight: 600;
+      letter-spacing: .08em;
+      cursor: pointer;
+      background: transparent;
+      transition: all .2s;
+      text-decoration: none;
+    }
+    .btn-topbar-back:hover {
+      background: rgba(240,192,96,.12);
+      border-color: var(--gold-bright);
+      color: var(--gold-bright);
+    }
 
-    /* ── Page Body ── */
-    .admin-body { padding: 2rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+    /* ── Body ── */
+    .admin-body { padding: 2rem 1.5rem; max-width: 1280px; margin: 0 auto; }
 
     /* ── Stat Cards ── */
     .stat-grid {
@@ -77,24 +119,22 @@
       padding: 1.4rem 1.6rem;
       box-shadow: var(--shadow-sm);
       display: flex; align-items: center; gap: 1rem;
-      transition: box-shadow .2s;
+      transition: box-shadow .2s, transform .2s;
     }
-    .stat-card:hover { box-shadow: var(--shadow-md); }
+    .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
     .stat-icon {
       width: 52px; height: 52px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
       font-size: 1.5rem; color: white; flex-shrink: 0;
     }
-    .stat-icon.total   { background: linear-gradient(135deg, var(--maroon), var(--maroon-deep)); }
-    .stat-icon.daily   { background: linear-gradient(135deg, #2e7d32, #43a047); }
-    .stat-icon.occasion{ background: linear-gradient(135deg, #1565c0, #1976d2); }
+    .stat-icon.total    { background: linear-gradient(135deg, var(--maroon), var(--maroon-deep)); }
+    .stat-icon.daily    { background: linear-gradient(135deg, #2e7d32, #43a047); }
+    .stat-icon.occasion { background: linear-gradient(135deg, #1565c0, #1976d2); }
     .stat-icon.sometimes{ background: linear-gradient(135deg, var(--saffron), var(--gold)); }
     .stat-num {
       font-family: 'Cinzel', serif;
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--maroon);
-      line-height: 1;
+      font-size: 2rem; font-weight: 700;
+      color: var(--maroon); line-height: 1;
     }
     .stat-label { font-size: .8rem; color: var(--text-light); margin-top: .2rem; }
 
@@ -114,12 +154,23 @@
     }
     .table-panel-header h2 {
       font-family: 'Cinzel', serif;
-      color: var(--gold-bright);
-      font-size: 1.05rem;
-      margin: 0;
-      display: flex; align-items: center; gap: .6rem;
+      color: var(--gold-bright); font-size: 1.05rem;
+      margin: 0; display: flex; align-items: center; gap: .6rem;
     }
     .table-panel-header h2 i { color: var(--saffron-light); }
+    .header-right { display: flex; align-items: center; gap: .8rem; }
+    .live-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #4caf50;
+      display: inline-block;
+      box-shadow: 0 0 6px #4caf50;
+      animation: pulse-green 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse-green {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .6; transform: scale(1.3); }
+    }
+    .last-updated { font-size: .75rem; color: #c8a060; }
 
     /* ── Toolbar ── */
     .toolbar {
@@ -128,22 +179,17 @@
       display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
       background: #fdf8f0;
     }
-    .search-box {
-      flex: 1; min-width: 200px;
-      position: relative;
-    }
+    .search-box { flex: 1; min-width: 200px; position: relative; }
     .search-box input {
       width: 100%;
       padding: .55rem 1rem .55rem 2.4rem;
       border: 1.5px solid var(--border-gold);
       border-radius: var(--radius);
-      background: var(--cream);
-      color: var(--text-dark);
-      font-size: .9rem;
+      background: var(--cream); color: var(--text-dark); font-size: .9rem;
+      transition: border-color .2s, box-shadow .2s;
     }
     .search-box input:focus {
-      outline: none;
-      border-color: var(--gold);
+      outline: none; border-color: var(--gold);
       box-shadow: 0 0 0 3px rgba(200,146,58,.15);
     }
     .search-box .search-icon {
@@ -155,70 +201,69 @@
       padding: .55rem .9rem;
       border: 1.5px solid var(--border-gold);
       border-radius: var(--radius);
-      background: var(--cream);
-      color: var(--text-dark);
-      font-size: .85rem;
-      cursor: pointer;
+      background: var(--cream); color: var(--text-dark); font-size: .85rem;
+      cursor: pointer; transition: border-color .2s;
     }
     .filter-select:focus { outline: none; border-color: var(--gold); }
-    .btn-export {
-      padding: .55rem 1.1rem;
-      background: linear-gradient(135deg, var(--saffron), var(--gold));
-      color: white; border: none; border-radius: var(--radius);
-      font-family: 'Cinzel', serif; font-size: .8rem;
-      font-weight: 600; letter-spacing: .06em;
-      cursor: pointer; display: flex; align-items: center; gap: .5rem;
-      transition: all .2s;
-      box-shadow: 0 2px 10px rgba(212,96,10,.3);
-    }
-    .btn-export:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(212,96,10,.4); }
-    .btn-refresh {
+
+    .toolbar-divider { width: 1px; height: 28px; background: var(--border-gold); flex-shrink: 0; }
+
+    .btn-toolbar {
       padding: .55rem .9rem;
-      background: var(--cream-dark);
-      border: 1.5px solid var(--border-gold);
       border-radius: var(--radius);
-      color: var(--maroon); font-size: .85rem;
-      cursor: pointer; transition: all .2s;
+      font-size: .82rem; cursor: pointer;
+      display: flex; align-items: center; gap: .45rem;
+      transition: all .2s; border: none; font-weight: 600;
+      white-space: nowrap;
     }
-    .btn-refresh:hover { background: var(--cream); border-color: var(--gold); }
+    .btn-refresh {
+      background: var(--cream-dark);
+      border: 1.5px solid var(--border-gold) !important;
+      border: none;
+      color: var(--maroon);
+    }
+    .btn-refresh:hover { background: var(--cream); border-color: var(--gold) !important; }
+    .btn-export-csv {
+      background: linear-gradient(135deg, #2e7d32, #43a047);
+      color: white;
+      box-shadow: 0 2px 10px rgba(46,125,50,.3);
+    }
+    .btn-export-csv:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(46,125,50,.4); }
+    .btn-export-pdf-all {
+      background: linear-gradient(135deg, var(--maroon-deep), var(--maroon));
+      color: var(--gold-bright);
+      border: 1px solid rgba(240,192,96,.3) !important;
+      border: none;
+      box-shadow: 0 2px 10px rgba(92,18,18,.3);
+    }
+    .btn-export-pdf-all:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(92,18,18,.4); }
 
     /* ── Table ── */
     .table-wrap { overflow-x: auto; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: .88rem;
-    }
+    table { width: 100%; border-collapse: collapse; font-size: .88rem; }
     thead tr {
       background: linear-gradient(135deg, #fdf0dc, #f5e2bc);
       border-bottom: 2px solid var(--gold);
     }
     thead th {
       padding: .85rem 1rem;
-      font-family: 'Cinzel', serif;
-      font-size: .75rem;
-      letter-spacing: .07em;
-      color: var(--maroon);
-      font-weight: 700;
-      white-space: nowrap;
-      cursor: pointer;
-      user-select: none;
-      text-transform: uppercase;
+      font-family: 'Cinzel', serif; font-size: .72rem;
+      letter-spacing: .07em; color: var(--maroon);
+      font-weight: 700; white-space: nowrap;
+      cursor: pointer; user-select: none; text-transform: uppercase;
     }
     thead th:hover { color: var(--saffron); }
-    thead th .sort-icon { margin-left: .4rem; opacity: .5; font-size: .65rem; }
+    thead th .sort-icon { margin-left: .4rem; opacity: .45; font-size: .62rem; }
     thead th.sorted .sort-icon { opacity: 1; color: var(--saffron); }
+    thead th:last-child { cursor: default; }
 
-    tbody tr {
-      border-bottom: 1px solid rgba(200,146,58,.15);
-      transition: background .15s;
-    }
+    tbody tr { border-bottom: 1px solid rgba(200,146,58,.15); transition: background .15s; }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: rgba(200,146,58,.07); }
     tbody tr.even { background: rgba(253,246,236,.5); }
     tbody tr.even:hover { background: rgba(200,146,58,.07); }
 
-    td { padding: .75rem 1rem; color: var(--text-dark); vertical-align: middle; }
+    td { padding: .72rem 1rem; color: var(--text-dark); vertical-align: middle; }
 
     /* ── ID Badge ── */
     .id-badge {
@@ -227,33 +272,56 @@
       color: var(--gold-bright);
       font-family: 'Cinzel', serif;
       font-size: .72rem; font-weight: 700;
-      padding: .2rem .6rem;
-      border-radius: 50px;
+      padding: .2rem .65rem; border-radius: 50px;
       letter-spacing: .08em;
+    }
+
+    /* ── Name Cell ── */
+    .name-cell { font-weight: 600; color: var(--text-dark); }
+    .name-cell .name-initial {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px;
+      background: linear-gradient(135deg, var(--saffron-light), var(--gold));
+      border-radius: 50%; color: white;
+      font-family: 'Cinzel', serif; font-size: .75rem; font-weight: 700;
+      margin-right: .55rem; flex-shrink: 0; vertical-align: middle;
     }
 
     /* ── Visit Badge ── */
     .visit-badge {
       display: inline-flex; align-items: center; gap: .35rem;
-      padding: .28rem .75rem;
-      border-radius: 50px;
+      padding: .28rem .75rem; border-radius: 50px;
       font-size: .78rem; font-weight: 600;
     }
-    .visit-badge.yes      { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
-    .visit-badge.no       { background: #fff8e1; color: #e65100; border: 1px solid #ffcc80; }
-    .visit-badge.special  { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+    .visit-badge.yes     { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+    .visit-badge.no      { background: #fff8e1; color: #e65100; border: 1px solid #ffcc80; }
+    .visit-badge.special { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
 
     /* ── Phone ── */
     .phone-cell { font-family: monospace; font-size: .9rem; letter-spacing: .04em; color: var(--maroon); }
 
-    /* ── Date Cell ── */
+    /* ── Date ── */
     .date-cell { font-size: .8rem; color: var(--text-light); white-space: nowrap; }
+
+    /* ── Action Buttons ── */
+    .action-cell { white-space: nowrap; }
+    .btn-row-action {
+      width: 30px; height: 30px;
+      border-radius: 6px; border: none;
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: .8rem;
+      transition: all .15s;
+    }
+    .btn-row-pdf {
+      background: linear-gradient(135deg, var(--maroon-deep), var(--maroon));
+      color: var(--gold-bright);
+      margin-right: .3rem;
+    }
+    .btn-row-pdf:hover { transform: scale(1.12); box-shadow: 0 3px 10px rgba(92,18,18,.35); }
 
     /* ── Empty / Loading ── */
     .empty-state, .loading-state {
-      text-align: center;
-      padding: 4rem 2rem;
-      color: var(--text-light);
+      text-align: center; padding: 4rem 2rem; color: var(--text-light);
     }
     .empty-state i, .loading-state i { font-size: 3rem; margin-bottom: 1rem; display: block; }
     .loading-state i { color: var(--gold); animation: spin .8s linear infinite; }
@@ -268,30 +336,59 @@
       background: #fdf8f0;
     }
     .page-info { font-size: .82rem; color: var(--text-light); }
+    .page-size-select {
+      padding: .3rem .6rem;
+      border: 1.5px solid var(--border-gold);
+      border-radius: var(--radius);
+      background: var(--cream); color: var(--text-dark);
+      font-size: .8rem; cursor: pointer;
+    }
     .page-btns { display: flex; gap: .4rem; }
     .page-btn {
       width: 32px; height: 32px;
-      border: 1.5px solid var(--border-gold);
-      border-radius: 6px;
-      background: var(--cream);
-      color: var(--maroon);
-      font-size: .82rem;
-      cursor: pointer;
+      border: 1.5px solid var(--border-gold); border-radius: 6px;
+      background: var(--cream); color: var(--maroon);
+      font-size: .82rem; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: all .15s;
-      font-family: 'Cinzel', serif; font-weight: 600;
+      transition: all .15s; font-family: 'Cinzel', serif; font-weight: 600;
     }
     .page-btn:hover:not(:disabled) { background: var(--gold); color: white; border-color: var(--gold); }
     .page-btn.active { background: var(--maroon); color: var(--gold-bright); border-color: var(--maroon); }
     .page-btn:disabled { opacity: .35; cursor: not-allowed; }
 
-    /* ── Gold Divider ── */
-    .gold-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 1.5rem 0; }
+    /* ── Toast ── */
+    .toast-container {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999;
+      display: flex; flex-direction: column; gap: .5rem;
+    }
+    .toast-msg {
+      background: var(--maroon-deep);
+      color: var(--gold-bright);
+      border: 1px solid rgba(240,192,96,.3);
+      border-radius: 8px;
+      padding: .7rem 1.2rem;
+      font-family: 'Cinzel', serif; font-size: .8rem;
+      box-shadow: var(--shadow-lg);
+      display: flex; align-items: center; gap: .6rem;
+      animation: toastIn .3s ease forwards;
+    }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+    /* ── PDF Progress ── */
+    .pdf-progress-bar {
+      display: none;
+      height: 3px;
+      background: linear-gradient(90deg, var(--maroon), var(--saffron), var(--gold));
+      background-size: 200% 100%;
+      animation: shimmer 1.2s linear infinite;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
     /* ── Responsive ── */
     @media (max-width: 600px) {
       .admin-body { padding: 1rem; }
       .stat-num { font-size: 1.5rem; }
+      .btn-topbar-back span { display: none; }
     }
   </style>
 </head>
@@ -303,17 +400,19 @@
     <div class="om">ॐ</div>
     <div class="brand-text">
       <div class="title">बाबा त्रिवटीनाथ मन्दिर</div>
-      <div class="sub">Bhakt Registration — Admin Panel</div>
+      <div class="sub">Bhakt Registrations — Viewer</div>
     </div>
   </div>
-  <div class="admin-badge"><i class="fas fa-shield-alt me-1"></i> Admin</div>
+  <div class="topbar-right">
+    <div class="admin-badge"><i class="fas fa-database me-1"></i> Live Data</div>
+  </div>
 </div>
 
 <!-- ── BODY ── -->
 <div class="admin-body">
 
   <!-- Stat Cards -->
-  <div class="stat-grid" id="stat-grid">
+  <div class="stat-grid">
     <div class="stat-card">
       <div class="stat-icon total"><i class="fas fa-users"></i></div>
       <div>
@@ -346,9 +445,16 @@
 
   <!-- Table Panel -->
   <div class="table-panel">
+
+    <!-- PDF progress bar -->
+    <div class="pdf-progress-bar" id="pdf-progress"></div>
+
     <div class="table-panel-header">
-      <h2><i class="fas fa-table"></i> भक्त पंजीकरण सूची</h2>
-      <span style="font-size:.78rem;color:#c8a060;" id="last-updated"></span>
+      <h2><i class="fas fa-list-ul"></i> भक्त पंजीकरण सूची</h2>
+      <div class="header-right">
+        <span class="live-dot"></span>
+        <span class="last-updated" id="last-updated"></span>
+      </div>
     </div>
 
     <!-- Toolbar -->
@@ -363,11 +469,17 @@
         <option value="no">📅 कभी-कभी</option>
         <option value="special">🎉 विशेष अवसर</option>
       </select>
-      <button class="btn-refresh" onclick="loadData()" title="Refresh">
-        <i class="fas fa-sync-alt"></i>
+
+      <div class="toolbar-divider"></div>
+
+      <button class="btn-toolbar btn-refresh" onclick="loadData()" title="Refresh">
+        <i class="fas fa-sync-alt"></i> Refresh
       </button>
-      <button class="btn-export" onclick="exportCSV()">
+      <button class="btn-toolbar btn-export-csv" onclick="exportCSV()">
         <i class="fas fa-file-csv"></i> CSV Export
+      </button>
+      <button class="btn-toolbar btn-export-pdf-all" onclick="exportAllPDF()">
+        <i class="fas fa-file-pdf"></i> PDF Export
       </button>
     </div>
 
@@ -391,14 +503,15 @@
             <th onclick="sortBy('registered_at')" id="th-registered_at">
               पंजीकरण तिथि <i class="fas fa-sort sort-icon"></i>
             </th>
+            <th style="width:70px;">डाउनलोड</th>
           </tr>
         </thead>
         <tbody id="table-body">
           <tr>
-            <td colspan="5">
+            <td colspan="6">
               <div class="loading-state">
                 <i class="fas fa-spinner"></i>
-                <div>डेटा लोड हो रहा है...</div>
+                <div>डेटा लोड हो रहा है…</div>
               </div>
             </td>
           </tr>
@@ -408,234 +521,593 @@
 
     <!-- Pagination -->
     <div class="pagination-bar">
-      <div class="page-info" id="page-info">—</div>
+      <div style="display:flex;align-items:center;gap:.8rem;">
+        <div class="page-info" id="page-info">—</div>
+        <select class="page-size-select" id="page-size-select" onchange="changePageSize()">
+          <option value="10">10 / पृष्ठ</option>
+          <option value="15" selected>15 / पृष्ठ</option>
+          <option value="25">25 / पृष्ठ</option>
+          <option value="50">50 / पृष्ठ</option>
+        </select>
+      </div>
       <div class="page-btns" id="page-btns"></div>
     </div>
   </div>
 
 </div><!-- /.admin-body -->
 
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script>
-  // ── Config ────────────────────────────────────────
-  const API_BASE   = '';  // Netlify: uses relative URLs
-  const PAGE_SIZE  = 15;
+// ────────────────────────────────────────────────────────────────
+//  CONFIG — Supabase direct fetch (no proxy needed)
+// ────────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://rzaroydzozayxugywyts.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_3fdgoQRuT5Qe2U9DBAWh_g_496Iw6fP';
+const API_BASE     = '';   // if using the Node backend proxy instead
 
-  // ── State ─────────────────────────────────────────
-  let allData      = [];
-  let filtered     = [];
-  let currentPage  = 1;
-  let sortCol      = 'id';
-  let sortDir      = 'desc';
+// ────────────────────────────────────────────────────────────────
+//  STATE
+// ────────────────────────────────────────────────────────────────
+let allData     = [];
+let filtered    = [];
+let currentPage = 1;
+let pageSize    = 15;
+let sortCol     = 'id';
+let sortDir     = 'desc';
 
-  // ── Visit labels ──────────────────────────────────
-  const visitLabel = {
-    yes    : { icon: '🙏', text: 'प्रतिदिन',      cls: 'yes'     },
-    no     : { icon: '📅', text: 'कभी-कभी',        cls: 'no'      },
-    special: { icon: '🎉', text: 'विशेष अवसर',     cls: 'special' }
-  };
+// ────────────────────────────────────────────────────────────────
+//  VISIT LABELS
+// ────────────────────────────────────────────────────────────────
+const visitLabel = {
+  yes    : { icon: '🙏', text: 'प्रतिदिन',    cls: 'yes'     },
+  no     : { icon: '📅', text: 'कभी-कभी',      cls: 'no'      },
+  special: { icon: '🎉', text: 'विशेष अवसर',   cls: 'special' }
+};
 
-  // ── Load data from API ────────────────────────────
-  async function loadData() {
-    document.getElementById('table-body').innerHTML = `
-      <tr><td colspan="5">
-        <div class="loading-state"><i class="fas fa-spinner"></i><div>डेटा लोड हो रहा है...</div></div>
-      </td></tr>`;
+// ────────────────────────────────────────────────────────────────
+//  LOAD DATA  (tries Supabase REST directly, falls back to /api)
+// ────────────────────────────────────────────────────────────────
+async function loadData() {
+  document.getElementById('table-body').innerHTML = `
+    <tr><td colspan="6">
+      <div class="loading-state"><i class="fas fa-spinner"></i><div>डेटा लोड हो रहा है…</div></div>
+    </td></tr>`;
+
+  try {
+    // ── Primary: Supabase REST API ───────────────────────────────
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/bhakt_registrations?select=*&order=id.desc`,
+      {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    if (!res.ok) throw new Error(`Supabase error: ${res.status}`);
+    allData = await res.json();
+
+  } catch (supaErr) {
+    // ── Fallback: node backend proxy ─────────────────────────────
     try {
-      const res  = await fetch(`${API_BASE}/api/registrations`);
-      const json = await res.json();
-      allData    = json.data || [];
-      updateStats();
-      applyFilters();
-      const now = new Date();
-      document.getElementById('last-updated').textContent =
-        `अपडेट: ${now.toLocaleTimeString('hi-IN')}`;
-    } catch (err) {
+      const res2 = await fetch(`${API_BASE}/api/registrations`);
+      const json = await res2.json();
+      if (!json.success) throw new Error(json.errors?.join(', ') || 'API error');
+      allData = json.data || [];
+    } catch (apiErr) {
       document.getElementById('table-body').innerHTML = `
-        <tr><td colspan="5">
+        <tr><td colspan="6">
           <div class="empty-state">
             <i class="fas fa-exclamation-triangle" style="color:#e74c3c;"></i>
-            <div>सर्वर से डेटा नहीं मिला।<br><small>सुनिश्चित करें कि <code>node server.js</code> चल रहा है।</small></div>
+            <div>सर्वर से डेटा नहीं मिला।<br>
+            <small style="font-size:.8rem;">${escHtml(apiErr.message)}</small></div>
           </div>
         </td></tr>`;
-    }
-  }
-
-  // ── Stats ─────────────────────────────────────────
-  function updateStats() {
-    document.getElementById('stat-total').textContent    = allData.length;
-    document.getElementById('stat-daily').textContent    = allData.filter(r => r.visit_type === 'yes').length;
-    document.getElementById('stat-sometimes').textContent= allData.filter(r => r.visit_type === 'no').length;
-    document.getElementById('stat-special').textContent  = allData.filter(r => r.visit_type === 'special').length;
-  }
-
-  // ── Filters + Search ──────────────────────────────
-  function applyFilters() {
-    const q      = document.getElementById('search-input').value.trim().toLowerCase();
-    const vType  = document.getElementById('visit-filter').value;
-
-    filtered = allData.filter(row => {
-      const matchQ = !q ||
-        row.full_name.toLowerCase().includes(q) ||
-        row.phone.includes(q);
-      const matchV = !vType || row.visit_type === vType;
-      return matchQ && matchV;
-    });
-
-    currentPage = 1;
-    sortData();
-    renderTable();
-    renderPagination();
-  }
-
-  // ── Sort ──────────────────────────────────────────
-  function sortBy(col) {
-    if (sortCol === col) {
-      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
-    } else {
-      sortCol = col;
-      sortDir = col === 'id' ? 'desc' : 'asc';
-    }
-    // Update header icons
-    document.querySelectorAll('thead th').forEach(th => th.classList.remove('sorted'));
-    const thEl = document.getElementById('th-' + col);
-    if (thEl) {
-      thEl.classList.add('sorted');
-      thEl.querySelector('.sort-icon').className =
-        `fas fa-sort-${sortDir === 'asc' ? 'up' : 'down'} sort-icon`;
-    }
-    sortData();
-    renderTable();
-    renderPagination();
-  }
-
-  function sortData() {
-    filtered.sort((a, b) => {
-      let va = a[sortCol] ?? '';
-      let vb = b[sortCol] ?? '';
-      if (sortCol === 'id') { va = +va; vb = +vb; }
-      else { va = String(va).toLowerCase(); vb = String(vb).toLowerCase(); }
-      if (va < vb) return sortDir === 'asc' ? -1 : 1;
-      if (va > vb) return sortDir === 'asc' ?  1 : -1;
-      return 0;
-    });
-  }
-
-  // ── Render Table ──────────────────────────────────
-  function renderTable() {
-    const tbody   = document.getElementById('table-body');
-    const start   = (currentPage - 1) * PAGE_SIZE;
-    const pageRows= filtered.slice(start, start + PAGE_SIZE);
-
-    if (!pageRows.length) {
-      tbody.innerHTML = `
-        <tr><td colspan="5">
-          <div class="empty-state">
-            <i class="fas fa-search" style="color:var(--gold);"></i>
-            <div>कोई रिकॉर्ड नहीं मिला।</div>
-          </div>
-        </td></tr>`;
+      showToast('error', 'डेटा लोड नहीं हो सका।');
       return;
     }
-
-    tbody.innerHTML = pageRows.map((row, i) => {
-      const v    = visitLabel[row.visit_type] || { icon: '?', text: row.visit_type, cls: 'no' };
-      const date = formatDate(row.registered_at);
-      const padId= String(row.id).padStart(4, '0');
-      return `
-        <tr class="${(start + i) % 2 === 0 ? '' : 'even'}">
-          <td><span class="id-badge">#${padId}</span></td>
-          <td><strong>${escHtml(row.full_name)}</strong></td>
-          <td><span class="phone-cell">+91 ${formatPhone(row.phone)}</span></td>
-          <td><span class="visit-badge ${v.cls}">${v.icon} ${v.text}</span></td>
-          <td><span class="date-cell">${date}</span></td>
-        </tr>`;
-    }).join('');
   }
 
-  // ── Pagination ────────────────────────────────────
-  function renderPagination() {
-    const total = filtered.length;
-    const pages = Math.ceil(total / PAGE_SIZE);
-    const start = (currentPage - 1) * PAGE_SIZE + 1;
-    const end   = Math.min(currentPage * PAGE_SIZE, total);
+  updateStats();
+  applyFilters();
+  const now = new Date();
+  document.getElementById('last-updated').textContent =
+    'अपडेट: ' + now.toLocaleTimeString('hi-IN');
+  showToast('success', `${allData.length} रिकॉर्ड लोड हुए`);
+}
 
-    document.getElementById('page-info').textContent =
-      total ? `${start}–${end} / कुल ${total} रिकॉर्ड` : 'कोई रिकॉर्ड नहीं';
+// ────────────────────────────────────────────────────────────────
+//  STATS
+// ────────────────────────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('stat-total').textContent     = allData.length;
+  document.getElementById('stat-daily').textContent     = allData.filter(r => r.visit_type === 'yes').length;
+  document.getElementById('stat-sometimes').textContent = allData.filter(r => r.visit_type === 'no').length;
+  document.getElementById('stat-special').textContent   = allData.filter(r => r.visit_type === 'special').length;
+}
 
-    const btns = document.getElementById('page-btns');
-    if (pages <= 1) { btns.innerHTML = ''; return; }
+// ────────────────────────────────────────────────────────────────
+//  FILTER + SEARCH
+// ────────────────────────────────────────────────────────────────
+function applyFilters() {
+  const q     = document.getElementById('search-input').value.trim().toLowerCase();
+  const vType = document.getElementById('visit-filter').value;
+  filtered = allData.filter(row => {
+    const mQ = !q || row.full_name?.toLowerCase().includes(q) || row.phone?.includes(q);
+    const mV = !vType || row.visit_type === vType;
+    return mQ && mV;
+  });
+  currentPage = 1;
+  sortData();
+  renderTable();
+  renderPagination();
+}
 
-    let html = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>
-                  <i class="fas fa-chevron-left"></i></button>`;
+// ────────────────────────────────────────────────────────────────
+//  SORT
+// ────────────────────────────────────────────────────────────────
+function sortBy(col) {
+  if (sortCol === col) {
+    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortCol = col;
+    sortDir = col === 'id' ? 'desc' : 'asc';
+  }
+  document.querySelectorAll('thead th').forEach(th => th.classList.remove('sorted'));
+  const thEl = document.getElementById('th-' + col);
+  if (thEl) {
+    thEl.classList.add('sorted');
+    thEl.querySelector('.sort-icon').className =
+      `fas fa-sort-${sortDir === 'asc' ? 'up' : 'down'} sort-icon`;
+  }
+  sortData(); renderTable(); renderPagination();
+}
 
-    for (let p = 1; p <= pages; p++) {
-      if (pages > 7 && p > 2 && p < pages - 1 && Math.abs(p - currentPage) > 1) {
-        if (p === 3 || p === pages - 2) html += `<button class="page-btn" disabled>…</button>`;
-        continue;
-      }
-      html += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
+function sortData() {
+  filtered.sort((a, b) => {
+    let va = a[sortCol] ?? '', vb = b[sortCol] ?? '';
+    if (sortCol === 'id') { va = +va; vb = +vb; }
+    else { va = String(va).toLowerCase(); vb = String(vb).toLowerCase(); }
+    if (va < vb) return sortDir === 'asc' ? -1 :  1;
+    if (va > vb) return sortDir === 'asc' ?  1 : -1;
+    return 0;
+  });
+}
+
+// ────────────────────────────────────────────────────────────────
+//  RENDER TABLE
+// ────────────────────────────────────────────────────────────────
+function renderTable() {
+  const tbody    = document.getElementById('table-body');
+  const start    = (currentPage - 1) * pageSize;
+  const pageRows = filtered.slice(start, start + pageSize);
+
+  if (!pageRows.length) {
+    tbody.innerHTML = `
+      <tr><td colspan="6">
+        <div class="empty-state">
+          <i class="fas fa-search" style="color:var(--gold);"></i>
+          <div>कोई रिकॉर्ड नहीं मिला।</div>
+        </div>
+      </td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = pageRows.map((row, i) => {
+    const v      = visitLabel[row.visit_type] || { icon: '?', text: row.visit_type, cls: 'no' };
+    const date   = formatDate(row.registered_at);
+    const padId  = String(row.id).padStart(4, '0');
+    const initial= (row.full_name || '?')[0].toUpperCase();
+    const rowIdx = (start + i);
+
+    return `
+      <tr class="${rowIdx % 2 !== 0 ? 'even' : ''}">
+        <td><span class="id-badge">#${padId}</span></td>
+        <td>
+          <div class="d-flex align-items-center">
+            <span class="name-initial">${escHtml(initial)}</span>
+            <span class="name-cell">${escHtml(row.full_name || '—')}</span>
+          </div>
+        </td>
+        <td><span class="phone-cell">+91 ${formatPhone(row.phone)}</span></td>
+        <td><span class="visit-badge ${v.cls}">${v.icon} ${v.text}</span></td>
+        <td><span class="date-cell">${date}</span></td>
+        <td class="action-cell">
+          <button class="btn-row-action btn-row-pdf"
+            onclick="downloadSinglePDF(${JSON.stringify(row).replace(/"/g, '&quot;')})"
+            title="प्रसाद पत्र डाउनलोड करें">
+            <i class="fas fa-file-pdf"></i>
+          </button>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+// ────────────────────────────────────────────────────────────────
+//  PAGINATION
+// ────────────────────────────────────────────────────────────────
+function renderPagination() {
+  const total = filtered.length;
+  const pages = Math.ceil(total / pageSize);
+  const start = (currentPage - 1) * pageSize + 1;
+  const end   = Math.min(currentPage * pageSize, total);
+
+  document.getElementById('page-info').textContent =
+    total ? `${start}–${end} / कुल ${total} रिकॉर्ड` : 'कोई रिकॉर्ड नहीं';
+
+  const btns = document.getElementById('page-btns');
+  if (pages <= 1) { btns.innerHTML = ''; return; }
+
+  let html = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>
+                <i class="fas fa-chevron-left"></i></button>`;
+  for (let p = 1; p <= pages; p++) {
+    if (pages > 7 && p > 2 && p < pages - 1 && Math.abs(p - currentPage) > 1) {
+      if (p === 3 || p === pages - 2) html += `<button class="page-btn" disabled>…</button>`;
+      continue;
     }
+    html += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
+  }
+  html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===pages?'disabled':''}>
+             <i class="fas fa-chevron-right"></i></button>`;
+  btns.innerHTML = html;
+}
 
-    html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===pages?'disabled':''}>
-               <i class="fas fa-chevron-right"></i></button>`;
-    btns.innerHTML = html;
+function goPage(p) {
+  const pages = Math.ceil(filtered.length / pageSize);
+  if (p < 1 || p > pages) return;
+  currentPage = p;
+  renderTable(); renderPagination();
+  document.querySelector('.table-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function changePageSize() {
+  pageSize = parseInt(document.getElementById('page-size-select').value);
+  currentPage = 1;
+  renderTable(); renderPagination();
+}
+
+// ────────────────────────────────────────────────────────────────
+//  CSV EXPORT
+// ────────────────────────────────────────────────────────────────
+function exportCSV() {
+  if (!filtered.length) { showToast('warn', 'कोई डेटा नहीं है।'); return; }
+  const headers = ['ID', 'पूरा नाम', 'मोबाइल', 'दर्शन प्रकार', 'पंजीकरण तिथि'];
+  const rows = filtered.map(r => [
+    r.id,
+    `"${(r.full_name || '').replace(/"/g, '""')}"`,
+    '+91' + (r.phone || ''),
+    visitLabel[r.visit_type]?.text || r.visit_type || '—',
+    r.registered_at || '—'
+  ]);
+  const csv  = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), {
+    href: url, download: `Trivatinath_Bhakt_${new Date().toISOString().slice(0,10)}.csv`
+  });
+  a.click(); URL.revokeObjectURL(url);
+  showToast('success', `CSV डाउनलोड हो रहा है (${filtered.length} रिकॉर्ड)`);
+}
+
+// ────────────────────────────────────────────────────────────────
+//  PDF — SINGLE ROW
+// ────────────────────────────────────────────────────────────────
+function downloadSinglePDF(row) {
+  const data = {
+    name      : row.full_name || '—',
+    id        : String(row.id).padStart(4, '0'),
+    visit_type: row.visit_type || 'no',
+    phone     : row.phone || '',
+    date      : row.registered_at || ''
+  };
+  buildPrasadPDF(data);
+  showToast('success', `#${data.id} का प्रसाद पत्र डाउनलोड हो रहा है`);
+}
+
+// ────────────────────────────────────────────────────────────────
+//  PDF — ALL / FILTERED  (one PDF, all rows as pages)
+// ────────────────────────────────────────────────────────────────
+async function exportAllPDF() {
+  if (!filtered.length) { showToast('warn', 'कोई डेटा नहीं है।'); return; }
+  if (filtered.length > 200) {
+    if (!confirm(`${filtered.length} रिकॉर्ड का PDF बनाया जाएगा। इसमें कुछ समय लग सकता है। जारी रखें?`)) return;
   }
 
-  function goPage(p) {
-    const pages = Math.ceil(filtered.length / PAGE_SIZE);
-    if (p < 1 || p > pages) return;
-    currentPage = p;
-    renderTable();
-    renderPagination();
-    document.querySelector('.table-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  const bar = document.getElementById('pdf-progress');
+  bar.style.display = 'block';
+  showToast('info', `PDF तैयार हो रही है… (${filtered.length} रिकॉर्ड)`);
 
-  // ── CSV Export ────────────────────────────────────
-  function exportCSV() {
-    if (!filtered.length) { alert('कोई डेटा नहीं है।'); return; }
-    const headers = ['ID', 'पूरा नाम', 'मोबाइल', 'दर्शन प्रकार', 'पंजीकरण तिथि'];
-    const rows = filtered.map(r => [
-      r.id,
-      `"${r.full_name}"`,
-      '+91' + r.phone,
-      visitLabel[r.visit_type]?.text || r.visit_type,
-      r.registered_at
-    ]);
-    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
-    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href = url; a.download = 'Trivatinath_Bhakt_Registrations.csv';
-    a.click(); URL.revokeObjectURL(url);
-  }
+  // Yield to browser first
+  await new Promise(r => setTimeout(r, 50));
 
-  // ── Helpers ───────────────────────────────────────
-  function formatDate(dt) {
-    if (!dt) return '—';
-    const d = new Date(dt);
-    if (isNaN(d)) return dt;
-    return d.toLocaleString('hi-IN', {
-      day: '2-digit', month: 'short', year: 'numeric',
-      hour: '2-digit', minute: '2-digit'
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+  const W = 297, H = 210;
+  const COLS = [12, 32, 80, 135, 175, 225];
+  const COL_W = [20, 48, 55, 40, 50, 35];
+  const HEADERS = ['क्र.सं.', 'पूरा नाम', 'मोबाइल', 'दर्शन प्रकार', 'पंजीकरण तिथि', 'ID'];
+  const ROW_H = 8, HEADER_H = 10, TOP = 38;
+  const PAGE_ROWS = 20;
+
+  let totalPages = Math.ceil(filtered.length / PAGE_ROWS);
+
+  for (let pg = 0; pg < totalPages; pg++) {
+    if (pg > 0) doc.addPage();
+
+    // ── Background ────────────────────────────────────────────────
+    doc.setFillColor(253, 246, 236);
+    doc.rect(0, 0, W, H, 'F');
+
+    // Top bar
+    doc.setFillColor(92, 18, 18);
+    doc.rect(0, 0, W, 22, 'F');
+    doc.setDrawColor(200, 146, 58);
+    doc.setLineWidth(1);
+    doc.line(0, 22, W, 22);
+
+    // ── Header text ───────────────────────────────────────────────
+    doc.setTextColor(240, 192, 96);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.text('BABA TRIVATINATH MANDIR — BHAKT REGISTRATION LIST', W / 2, 11, { align: 'center' });
+    doc.setFontSize(8);
+    doc.setTextColor(200, 170, 100);
+    doc.text(`Generated: ${new Date().toLocaleString('en-IN')}  |  Total Records: ${filtered.length}  |  Page ${pg+1} of ${totalPages}`, W / 2, 17, { align: 'center' });
+
+    // ── OM symbol left ────────────────────────────────────────────
+    doc.setTextColor(240, 192, 96);
+    doc.setFontSize(18);
+    doc.text('OM', 10, 13);
+
+    // ── Column header row ─────────────────────────────────────────
+    doc.setFillColor(122, 28, 28);
+    doc.rect(8, TOP - HEADER_H, W - 16, HEADER_H, 'F');
+    doc.setDrawColor(200, 146, 58);
+    doc.setLineWidth(0.5);
+    doc.rect(8, TOP - HEADER_H, W - 16, HEADER_H, 'D');
+
+    doc.setTextColor(240, 192, 96);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    HEADERS.forEach((h, ci) => {
+      doc.text(h, COLS[ci] + 2, TOP - 3);
     });
+
+    // ── Data rows ─────────────────────────────────────────────────
+    const pageRows = filtered.slice(pg * PAGE_ROWS, (pg + 1) * PAGE_ROWS);
+    pageRows.forEach((row, ri) => {
+      const y = TOP + ri * ROW_H;
+      // Alternate row bg
+      if (ri % 2 === 0) {
+        doc.setFillColor(253, 248, 236);
+        doc.rect(8, y, W - 16, ROW_H, 'F');
+      }
+      // Row border
+      doc.setDrawColor(200, 146, 58);
+      doc.setLineWidth(0.2);
+      doc.line(8, y + ROW_H, W - 8, y + ROW_H);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(44, 26, 14);
+
+      const vt   = visitLabel[row.visit_type]?.text || row.visit_type || '—';
+      const dt   = row.registered_at ? new Date(row.registered_at).toLocaleDateString('en-IN') : '—';
+      const ph   = row.phone ? '+91 ' + formatPhone(row.phone) : '—';
+      const padId= String(row.id).padStart(4, '0');
+      const rowNum = pg * PAGE_ROWS + ri + 1;
+
+      const vals = [String(rowNum), row.full_name || '—', ph, vt, dt, '#' + padId];
+      vals.forEach((val, ci) => {
+        // Truncate if too long
+        const maxW  = COL_W[ci] - 4;
+        let text    = String(val);
+        if (doc.getTextWidth(text) > maxW) {
+          while (doc.getTextWidth(text + '…') > maxW && text.length > 1)
+            text = text.slice(0, -1);
+          text += '…';
+        }
+        // Color ID badge
+        if (ci === 5) { doc.setTextColor(122, 28, 28); doc.setFont('helvetica', 'bold'); }
+        else { doc.setTextColor(44, 26, 14); doc.setFont('helvetica', 'normal'); }
+        doc.text(text, COLS[ci] + 2, y + ROW_H - 2.5);
+      });
+    });
+
+    // ── Table outer border ────────────────────────────────────────
+    doc.setDrawColor(200, 146, 58);
+    doc.setLineWidth(0.7);
+    doc.rect(8, TOP - HEADER_H, W - 16, HEADER_H + pageRows.length * ROW_H, 'D');
+
+    // ── Footer ────────────────────────────────────────────────────
+    doc.setFillColor(92, 18, 18);
+    doc.rect(0, H - 14, W, 14, 'F');
+    doc.setDrawColor(200, 146, 58);
+    doc.setLineWidth(0.7);
+    doc.line(0, H - 14, W, H - 14);
+    doc.setTextColor(200, 160, 80);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.text('Om Namah Shivaya  |  Baba Trivati Nath Mandir Marg, Prem Nagar, Bareilly-243005 (U.P.)  |  +91-581-2540667  |  www.trivatinathmandir.org', W / 2, H - 5, { align: 'center' });
   }
 
-  function formatPhone(p) {
-    if (!p) return '—';
-    const s = p.replace(/\D/g, '');
-    return s.length === 10 ? `${s.slice(0,5)} ${s.slice(5)}` : s;
-  }
+  const filename = `Trivatinath_Registrations_${new Date().toISOString().slice(0,10)}.pdf`;
+  doc.save(filename);
 
-  function escHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
+  bar.style.display = 'none';
+  showToast('success', `PDF डाउनलोड हो रहा है (${filtered.length} रिकॉर्ड, ${totalPages} पृष्ठ)`);
+}
 
-  // ── Init ──────────────────────────────────────────
-  loadData();
-  // Auto-refresh every 30 seconds
-  setInterval(loadData, 30000);
+// ────────────────────────────────────────────────────────────────
+//  BUILD SINGLE PRASAD PATRA PDF  (A4 portrait, branded)
+// ────────────────────────────────────────────────────────────────
+function buildPrasadPDF(data) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const W = 210, H = 297;
+
+  // Background
+  doc.setFillColor(92, 18, 18);
+  doc.rect(0, 0, W, H, 'F');
+  doc.setFillColor(180, 60, 10);
+  doc.rect(0, 0, W, 22, 'F');
+  doc.setFillColor(180, 60, 10);
+  doc.rect(0, H - 22, W, 22, 'F');
+
+  // Gold border
+  doc.setDrawColor(212, 175, 55); doc.setLineWidth(1.2);
+  doc.rect(8, 8, W - 16, H - 16);
+  doc.setLineWidth(0.4);
+  doc.rect(11, 11, W - 22, H - 22);
+
+  // Top banner
+  doc.setTextColor(255, 240, 180);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
+  doc.text('JAY BABA TRIVATINATH', W / 2, 15, { align: 'center' });
+
+  // OM circle
+  doc.setDrawColor(212, 175, 55); doc.setLineWidth(0.6);
+  doc.circle(W / 2, 50, 18, 'D');
+  doc.setTextColor(212, 175, 55);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(26);
+  doc.text('OM', W / 2, 54, { align: 'center' });
+
+  // Title
+  doc.setTextColor(255, 240, 180); doc.setFontSize(22);
+  doc.text('PRASAD PATRA', W / 2, 80, { align: 'center' });
+  doc.setFontSize(12); doc.setTextColor(212, 175, 55);
+  doc.text('Baba Trivatinath Mandir Seva Samiti', W / 2, 89, { align: 'center' });
+
+  // Divider
+  doc.setDrawColor(212, 175, 55); doc.setLineWidth(0.8);
+  doc.line(30, 95, W - 30, 95);
+  doc.setLineWidth(0.3);
+  doc.line(35, 97, W - 35, 97);
+
+  // Cert box
+  doc.setFillColor(255, 248, 220);
+  doc.roundedRect(18, 103, W - 36, 118, 4, 4, 'F');
+  doc.setDrawColor(212, 175, 55); doc.setLineWidth(0.6);
+  doc.roundedRect(18, 103, W - 36, 118, 4, 4, 'D');
+
+  doc.setTextColor(92, 18, 18); doc.setFont('helvetica', 'bold'); doc.setFontSize(14);
+  doc.text('BHAKT REGISTRATION CERTIFICATE', W / 2, 115, { align: 'center' });
+
+  doc.setLineWidth(0.4); doc.setDrawColor(180, 60, 10);
+  doc.line(30, 119, W - 30, 119);
+
+  // Reg badge
+  doc.setFillColor(92, 18, 18);
+  doc.roundedRect(W / 2 - 32, 123, 64, 10, 2, 2, 'F');
+  doc.setTextColor(255, 215, 0); doc.setFontSize(9);
+  doc.text('REGISTRATION  #' + data.id, W / 2, 130, { align: 'center' });
+
+  doc.setTextColor(92, 18, 18); doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+  doc.text('This is to certify that', W / 2, 142, { align: 'center' });
+
+  // Name
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.setTextColor(180, 60, 10);
+  const dName = data.name.length > 28 ? data.name.slice(0, 26) + '…' : data.name;
+  doc.text(dName, W / 2, 154, { align: 'center' });
+  const nW = doc.getTextWidth(dName);
+  doc.setDrawColor(180, 60, 10); doc.setLineWidth(0.5);
+  doc.line(W/2 - nW/2, 156, W/2 + nW/2, 156);
+
+  doc.setTextColor(60, 30, 10); doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+  doc.text('has been successfully registered as a devotee of', W / 2, 165, { align: 'center' });
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(92, 18, 18);
+  doc.text('Baba Trivatinath Mandir, Nath Nagari, Bareilly', W / 2, 173, { align: 'center' });
+
+  // Visit badge
+  const vLabels = { yes: 'Daily Devotee', no: 'Occasional Devotee', special: 'Special Occasion Devotee' };
+  doc.setFillColor(255, 235, 180);
+  doc.roundedRect(W/2-40, 178, 80, 9, 2, 2, 'F');
+  doc.setDrawColor(180, 60, 10); doc.setLineWidth(0.3);
+  doc.roundedRect(W/2-40, 178, 80, 9, 2, 2, 'D');
+  doc.setTextColor(92, 18, 18); doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
+  doc.text((vLabels[data.visit_type] || data.visit_type || '—').toUpperCase(), W / 2, 184, { align: 'center' });
+
+  // Phone + date
+  const mPhone = data.phone ? '+91 ' + data.phone.replace(/(\d{6})(\d{4})/, '******$2') : '';
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(100, 50, 20);
+  doc.text('Mobile: ' + mPhone, W / 2, 196, { align: 'center' });
+  const regDate = data.date
+    ? new Date(data.date).toLocaleDateString('en-IN', { day:'2-digit', month:'long', year:'numeric' })
+    : new Date().toLocaleDateString('en-IN', { day:'2-digit', month:'long', year:'numeric' });
+  doc.text('Date of Registration: ' + regDate, W / 2, 203, { align: 'center' });
+
+  // Seal
+  doc.setDrawColor(92, 18, 18); doc.setLineWidth(1);
+  doc.circle(W / 2, 216, 9, 'D');
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(92, 18, 18);
+  doc.text('OM', W / 2, 220, { align: 'center' });
+
+  // Footer
+  doc.setTextColor(255, 240, 180); doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  doc.text('Om Namah Shivaya  |  Vikram Samvat 1474 se Seva mein', W / 2, 242, { align: 'center' });
+  doc.setFontSize(8); doc.setTextColor(255, 220, 150);
+  doc.text('Baba Tibari Nath Mandir Marg, Prem Nagar, Bareilly - 243005 (U.P.) India', W / 2, 250, { align: 'center' });
+  doc.text('Tel: +91-581-2540667  |  www.trivatinathmandir.org', W / 2, 256, { align: 'center' });
+
+  doc.setDrawColor(212, 175, 55); doc.setLineWidth(0.6);
+  doc.line(30, H - 24, W - 30, H - 24);
+  doc.setTextColor(255, 240, 180); doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
+  doc.text('JAY BABA TRIVATINATH  |  OM NAMAH SHIVAYA', W / 2, H - 14, { align: 'center' });
+
+  // Corner dots
+  doc.setFillColor(212, 175, 55);
+  [[14,14],[W-14,14],[14,H-14],[W-14,H-14]].forEach(([x,y]) => doc.circle(x, y, 2, 'F'));
+
+  doc.save('Trivatinath_Prasad_Patra_' + data.id + '.pdf');
+}
+
+// ────────────────────────────────────────────────────────────────
+//  TOAST NOTIFICATION
+// ────────────────────────────────────────────────────────────────
+function showToast(type, msg) {
+  const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warn: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+  const colors = { success: '#4caf50', error: '#e74c3c', warn: '#f9a825', info: 'var(--saffron-light)' };
+  const container = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  el.className = 'toast-msg';
+  el.innerHTML = `<i class="fas ${icons[type] || icons.info}" style="color:${colors[type] || colors.info};"></i> ${escHtml(msg)}`;
+  container.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateY(8px)'; el.style.transition = '.3s'; setTimeout(() => el.remove(), 350); }, 3000);
+}
+
+// ────────────────────────────────────────────────────────────────
+//  HELPERS
+// ────────────────────────────────────────────────────────────────
+function formatDate(dt) {
+  if (!dt) return '—';
+  const d = new Date(dt);
+  if (isNaN(d)) return dt;
+  return d.toLocaleString('hi-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+function formatPhone(p) {
+  if (!p) return '—';
+  const s = p.replace(/\D/g, '');
+  return s.length === 10 ? `${s.slice(0,5)} ${s.slice(5)}` : s;
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ────────────────────────────────────────────────────────────────
+//  INIT
+// ────────────────────────────────────────────────────────────────
+loadData();
+setInterval(loadData, 60000); // auto-refresh every 60 s
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
